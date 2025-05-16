@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,15 +14,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Llama primero al seeder de roles y permisos
         $this->call([
             UserRolePermissionSeeder::class,
-            // Puedes añadir otros seeders aquí si los tienes
+            // Otros seeders que tengas
         ]);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Email del usuario por defecto
+        $email = 'test@example.com';
+
+        // Verifica si el usuario ya existe para evitar duplicados
+        if (!User::where('email', $email)->exists()) {
+            User::factory()->create([
+                'name' => 'Test User',
+                'email' => $email,
+                'password' => Hash::make('password123'), // Agrega contraseña segura
+            ]);
+        }
     }
 }
