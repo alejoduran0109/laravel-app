@@ -18,15 +18,39 @@ class CheckFilamentPermissions
 
             $user = auth()->user();
             
-            // Depuración
+            // Depuración detallada
             if (config('app.debug')) {
-                \Log::info('Usuario autenticado', [
+                \Log::info('Verificación de permisos - Usuario autenticado', [
                     'id' => $user->id,
                     'email' => $user->email,
-                    'roles' => $user->getRoleNames(),
-                    'permissions' => $user->getAllPermissions()->pluck('name'),
+                    'roles' => $user->getRoleNames()->toArray(),
+                    'all_permissions' => $user->getAllPermissions()->pluck('name')->toArray(),
+                    'direct_permissions' => $user->getDirectPermissions()->pluck('name')->toArray(),
+                    'permissions_via_roles' => $user->getPermissionsViaRoles()->pluck('name')->toArray(),
                     'path' => $request->path(),
-                    'segments' => $request->segments()
+                    'segments' => $request->segments(),
+                    'is_super_admin' => $user->hasRole('Super Admin'),
+                    'session_data' => session()->all()
+                ]);
+            }
+
+            // Debug detallado
+            if ($request->path() === 'admin/dashboard') {
+                dd([
+                    'user' => [
+                        'id' => $user->id,
+                        'email' => $user->email,
+                        'roles' => $user->getRoleNames(),
+                        'all_permissions' => $user->getAllPermissions()->pluck('name'),
+                        'is_super_admin' => $user->hasRole('Super Admin'),
+                    ],
+                    'session' => session()->all(),
+                    'request' => [
+                        'path' => $request->path(),
+                        'url' => $request->url(),
+                        'full_url' => $request->fullUrl(),
+                        'segments' => $request->segments(),
+                    ]
                 ]);
             }
             
