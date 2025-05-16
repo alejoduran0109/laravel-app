@@ -9,6 +9,28 @@ class CheckFilamentPermissions
 {
     public function handle(Request $request, Closure $next)
     {
+        // Debug al inicio para asegurar que se ejecute
+        if (str_starts_with($request->path(), 'admin')) {
+            $user = auth()->user();
+            dd([
+                'debug' => 'Inicio del middleware',
+                'is_authenticated' => auth()->check(),
+                'user' => $user ? [
+                    'id' => $user->id,
+                    'email' => $user->email,
+                    'roles' => $user->roles->pluck('name'),
+                    'all_permissions' => $user->getAllPermissions()->pluck('name'),
+                ] : null,
+                'session' => session()->all(),
+                'request' => [
+                    'path' => $request->path(),
+                    'url' => $request->url(),
+                    'method' => $request->method(),
+                    'headers' => $request->headers->all(),
+                ]
+            ]);
+        }
+
         // Solo verificar permisos si el usuario está autenticado
         if (auth()->check()) {
             // Si es la ruta de login, permitir acceso
