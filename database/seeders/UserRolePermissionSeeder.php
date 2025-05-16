@@ -21,7 +21,7 @@ class UserRolePermissionSeeder extends Seeder
         // Definir Permisos con títulos
         $permissionsData = [
             // Permisos de Usuario
-            ['name' => 'view_users', 'title' => 'Ver Usuarios'],
+            ['name' => 'view_usuarios', 'title' => 'Ver Usuarios'],
             ['name' => 'create_users', 'title' => 'Crear Usuarios'],
             ['name' => 'edit_users', 'title' => 'Editar Usuarios'],
             ['name' => 'delete_users', 'title' => 'Eliminar Usuarios'],
@@ -31,7 +31,7 @@ class UserRolePermissionSeeder extends Seeder
             ['name' => 'edit_roles', 'title' => 'Editar Roles'],
             ['name' => 'delete_roles', 'title' => 'Eliminar Roles'],
             // Permisos de Permiso (generalmente solo ver)
-            ['name' => 'view_permissions', 'title' => 'Ver Permisos'],
+            ['name' => 'view_permisos', 'title' => 'Ver Permisos'],
             // General
             ['name' => 'access_admin_panel', 'title' => 'Acceder al Panel de Administración'],
         ];
@@ -53,9 +53,9 @@ class UserRolePermissionSeeder extends Seeder
         // Rol Admin - puede gestionar usuarios y roles
         $adminRole = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
         $adminPermissionNames = [
-            'view_users', 'create_users', 'edit_users', 'delete_users',
+            'view_usuarios', 'create_users', 'edit_users', 'delete_users',
             'view_roles', 'create_roles', 'edit_roles', 'delete_roles',
-            'access_admin_panel',
+            'access_admin_panel', 'view_permisos',
         ];
         $adminPermissions = Permission::whereIn('name', $adminPermissionNames)->get();
         $adminRole->syncPermissions($adminPermissions);
@@ -64,7 +64,7 @@ class UserRolePermissionSeeder extends Seeder
         // Rol Editor - puede ver usuarios y acceder al panel de administración
         $editorRole = Role::firstOrCreate(['name' => 'Editor', 'guard_name' => 'web']);
         $editorPermissionNames = [
-            'view_users',
+            'view_usuarios',
             'access_admin_panel',
         ];
         $editorPermissions = Permission::whereIn('name', $editorPermissionNames)->get();
@@ -73,7 +73,7 @@ class UserRolePermissionSeeder extends Seeder
 
         // Rol Usuario Básico
         $userRole = Role::firstOrCreate(['name' => 'User', 'guard_name' => 'web']);
-        $userPermissionNames = ['access_admin_panel']; // Ejemplo: solo permitir acceso al panel
+        $userPermissionNames = ['access_admin_panel', 'view_permisos']; // Ejemplo: solo permitir acceso al panel
         $userPermissions = Permission::whereIn('name', $userPermissionNames)->get();
         $userRole->syncPermissions($userPermissions);
         $this->command->info('Rol User creado y permisos asignados.');
