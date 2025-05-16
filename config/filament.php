@@ -3,12 +3,12 @@
 return [
     'auth' => [
         'guards' => [
-            'admin' => [
-                'provider' => 'users',
+            'web' => [
                 'driver' => 'session',
+                'provider' => 'users',
             ],
         ],
-        'default_guard' => 'admin',
+        'default_guard' => 'web',
     ],
     'panels' => [
         'admin' => [
