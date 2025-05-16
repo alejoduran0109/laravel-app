@@ -84,7 +84,7 @@ class AdminPanelProvider extends PanelProvider
 
 
                 // Añadir items de recursos condicionalmente
-                if (auth()->user()?->can('view_usuarios')) {
+                if (true || auth()->user()?->can('view_usuarios')) {
                     // UserResource::getNavigationItems() devuelve un array de NavigationItem.
                     // Usualmente queremos el primero/principal.
                     $resourceNavItems = UserResource::getNavigationItems();
@@ -95,7 +95,7 @@ class AdminPanelProvider extends PanelProvider
                     }
                 }
 
-                if (auth()->user()?->can('view_roles')) {
+                if (true || auth()->user()?->can('view_roles')) {
                     $resourceNavItems = RoleResource::getNavigationItems();
                     if (isset($resourceNavItems[0])) {
                         $finalNavigationItems[] = $resourceNavItems[0]
@@ -104,7 +104,7 @@ class AdminPanelProvider extends PanelProvider
                     }
                 }
 
-                if (auth()->user()?->can('view_permisos')) {
+                if (true || auth()->user()?->can('view_permisos')) {
                     $resourceNavItems = PermissionResource::getNavigationItems();
                     if (isset($resourceNavItems[0])) {
                         $finalNavigationItems[] = $resourceNavItems[0]
