@@ -9,6 +9,8 @@ class CheckFilamentPermissions
 {
     public function handle(Request $request, Closure $next)
     {
+        dd('Llegando al middleware de permisos', auth()->check(), auth()->user(), $request->segments());
+        
         // Solo verificar permisos si el usuario está autenticado
         if (auth()->check()) {
             $segments = $request->segments();

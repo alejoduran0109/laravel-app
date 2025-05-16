@@ -11,6 +11,8 @@ class Authenticate extends Middleware
      */
     protected function redirectTo($request)
     {
+        dd('Llegando al middleware de autenticación', auth()->check(), auth()->user());
+        
         if (!$request->expectsJson()) {
             return route('filament.auth.login');
         }
