@@ -4,7 +4,7 @@ protected $middlewareGroups = [
     ],
     
     'filament' => [
-        \App\Http\Middleware\Authenticate::class,
+        \Illuminate\Auth\Middleware\Authenticate::class,
         \App\Http\Middleware\CheckFilamentPermissions::class,
     ],
 ];
