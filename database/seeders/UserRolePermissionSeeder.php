@@ -87,8 +87,11 @@ class UserRolePermissionSeeder extends Seeder
                 'password' => Hash::make('password123'), // ¡Cambia esto por una contraseña segura!
             ]
         );
-        $superAdminUser->assignRole($superAdminRole);
+        
+        // Asegurarse de que el rol se asigne correctamente
+        $superAdminUser->syncRoles([$superAdminRole]);
         $this->command->info('Usuario Super Admin creado y rol asignado.');
+        $this->command->info('Roles del Super Admin: ' . $superAdminUser->getRoleNames()->implode(', '));
 
         // Usuario Admin
         $adminUser = User::firstOrCreate(

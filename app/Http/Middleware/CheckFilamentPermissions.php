@@ -9,8 +9,20 @@ class CheckFilamentPermissions
 {
     public function handle(Request $request, Closure $next)
     {
-        // Solo verificar permisos si el usuario está autenticado Y no es la ruta de login
-        if (auth()->check() && $request->path() !== 'admin/login') {
+        // Solo verificar permisos si el usuario está autenticado
+        if (auth()->check()) {
+            // Si es la ruta de login, permitir acceso
+            if ($request->path() === 'admin/login') {
+                return $next($request);
+            }
+
+            $user = auth()->user();
+            
+            // Verificar si el usuario es super admin
+            if ($user->hasRole('Super Admin')) {
+                return $next($request);
+            }
+
             $segments = $request->segments();
             
             if (count($segments) >= 2) {
@@ -23,8 +35,10 @@ class CheckFilamentPermissions
                     default => null,
                 };
 
-                if ($permission && !auth()->user()->hasPermissionTo($permission)) {
-                    abort(403, 'No tienes permiso para acceder a esta página');
+                if ($permission) {
+                    if (!$user->hasPermissionTo($permission)) {
+                        abort(403, 'No tienes permiso para acceder a esta página');
+                    }
                 }
             }
         }
